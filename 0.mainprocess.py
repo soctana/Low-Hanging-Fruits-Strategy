@@ -11,12 +11,12 @@ ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRE
 
 # 要執行的6個程式的路徑
 scripts = [
-    r'G:\我的雲端硬碟\Horizon\Python\1.stock_code_IEPSQALPWC_combine.py',
-    r'G:\我的雲端硬碟\Horizon\Python\2A.ipo_sauron_AATEDRADTANLSCM_close.py',
-    r'G:\我的雲端硬碟\Horizon\Python\2B.ipo_sauron_AATEDRADTANLSCM_close.py',
-    r'G:\我的雲端硬碟\Horizon\Python\2C.ipo_sauron_AATEDRADTANLSCM_close.py',
-    r'G:\我的雲端硬碟\Horizon\Python\2D.ipo_sauron_AATEDRADTANLSCM_close.py',
-    r'G:\我的雲端硬碟\Horizon\Python\3.calculation_4Q_PMDDMSRRNOIPSBSC_close.py'
+    r'G:\我的雲端硬碟\Indie Hackers\Low-Hanging Fruits Strategy\1.range.py',
+    r'G:\我的雲端硬碟\Indie Hackers\Low-Hanging Fruits Strategy\2A.dividend.py',
+    r'G:\我的雲端硬碟\Indie Hackers\Low-Hanging Fruits Strategy\2B.dividend.py',
+    r'G:\我的雲端硬碟\Indie Hackers\Low-Hanging Fruits Strategy\2C.dividend.py',
+    r'G:\我的雲端硬碟\Indie Hackers\Low-Hanging Fruits Strategy\2D.dividend.py',
+    r'G:\我的雲端硬碟\Indie Hackers\Low-Hanging Fruits Strategy\3.calculation.py'
 ]
 
 # 依序執行每個程式，並且每次執行完後等待6分鐘

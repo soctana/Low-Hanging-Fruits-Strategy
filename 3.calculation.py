@@ -44,7 +44,7 @@ def fetch_closing_prices():
 # 計算與合併資料
 def calculate_and_combine(df):
     # 讀取 "手動List" 資料
-    manual_list_path = r'G:\我的雲端硬碟\Horizon\Eye of Sauron.xlsx'
+    manual_list_path = r'G:\我的雲端硬碟\Horizon\Additional Data_LHF.xlsx'
     manual_list_df = pd.read_excel(manual_list_path, sheet_name='手動List')
 
     # 比對 "股票代碼" 和 "公司代號"，並將 "手動List" 中的相應列加入 df

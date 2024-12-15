@@ -109,7 +109,7 @@ def fetch_stage_two_financial_data(df_stage_one, market_type):
     """階段二：並行抓取通過階段一的股票的Operating Income及Pretax Income，並進行條件判斷"""
 
     # 讀取"EPS持股"sheet中的position欄位
-    eps_file_path = r"G:\我的雲端硬碟\Horizon\Eye of Sauron.xlsx"
+    eps_file_path = r"G:\我的雲端硬碟\Horizon\Additional Data_LHF.xlsx"
     eps_df = pd.read_excel(eps_file_path, sheet_name='EPS持股')
     positions = eps_df['position'].astype(str).tolist()
 
