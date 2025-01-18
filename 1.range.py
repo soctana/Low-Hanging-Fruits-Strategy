@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import yfinance as yf
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
+import datetime
 
 # 抓取上市和上櫃公司股票代碼
 def get_all_stock_codes(market_type):
@@ -41,16 +42,17 @@ def fetch_yahoo_financial_data(ticker):
     pretax_income = quarterly_financials.loc['Pretax Income'].head(4)
     return operating_income, pretax_income
 
-# 抓取API的營收資料
+# 抓取API的營收資料，並在2/1~3/10期間改用本機Excel數據
 def fetch_stage_one_financial_data(stock_list, market_type):
-    """抓取營收相關資料並篩選"""
     api_url = "https://openapi.twse.com.tw/v1/opendata/t187ap05_L" if market_type == 2 else "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O"
 
     try:
+        today = datetime.datetime(2025, 2, 5)  # 模擬今天是 2025/2/5
+        special_period = datetime.datetime(today.year, 2, 1) <= today <= datetime.datetime(today.year, 3, 10)
+
         response = requests.get(api_url)
         response.raise_for_status()
         data = response.json()
-
         df = pd.DataFrame(data)
         df.columns = df.columns.str.strip()
         df = df[df['公司代號'].isin(stock_list)]
@@ -62,27 +64,29 @@ def fetch_stage_one_financial_data(stock_list, market_type):
         for col in numeric_columns:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors='coerce').round(2)
-
-        for col in numeric_columns:
-            if col in df.columns:
                 df[col] = df[col].apply(format_to_thousands)
-        
-        # 在數據中添加市場類型欄位
+
         market_label = '上市' if market_type == 2 else '上櫃'
         df['市場類型'] = market_label
 
         df['累計營業收入-前期比較增減(%)'] = pd.to_numeric(df['累計營業收入-前期比較增減(%)'], errors='coerce')
+
+        if special_period:
+            print("⚠️ 當前時間在 2/1~3/10，將使用 Excel 數據替換「累計營業收入-前期比較增減(%)」")
+            excel_path = r"G:\我的雲端硬碟\Horizon\python_stock\202412revenue.xlsx"
+            excel_df = pd.read_excel(excel_path, usecols=[0, 2])
+            excel_df.columns = ['公司代號', '累計營業收入-前期比較增減(%)']
+            excel_df['公司代號'] = excel_df['公司代號'].astype(str)
+            excel_df['累計營業收入-前期比較增減(%)'] = pd.to_numeric(excel_df['累計營業收入-前期比較增減(%)'], errors='coerce')
+            df = df.merge(excel_df, on='公司代號', how='left', suffixes=('', '_excel'))
+            df['累計營業收入-前期比較增減(%)'] = df['累計營業收入-前期比較增減(%)_excel'].combine_first(df['累計營業收入-前期比較增減(%)'])
+            df.drop(columns=['累計營業收入-前期比較增減(%)_excel'], inplace=True)
+
         df_stage_one = df[df['累計營業收入-前期比較增減(%)'] > 0].copy()
         df_stage_one['Operating Income / Pretax Income Ratio'] = None
         return df, df_stage_one
-
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
     except requests.exceptions.RequestException as err:
         print(f"Error occurred: {err}")
-    except ValueError:
-        print("Error parsing JSON")
-
     return None, None
 
 # 處理單隻股票的財務數據
