@@ -206,12 +206,12 @@ def combine_revenue_and_financial_data(stock_code, start_year, end_year, target_
         revenue_df.to_excel(writer, index=False, sheet_name='Revenue')
 
         # 匯入其他Excel檔案的指定工作表
-        import_file_path = r'G:\我的雲端硬碟\Horizon\python_stock\3005_is_2024Q2_202410_formation.xlsx'
+        import_file_path = r'G:\我的雲端硬碟\Horizon\python_stock\1537_is_2024Q3_202501_formation.xlsx'
         import_sheets = ['★IS(IFRS項目)', 'breakdown', 'Financial Statements_adj']
         import_sheets_from_excel(import_file_path, import_sheets, writer)
 
     # 6. 複製格式到目標檔案
-    source_wb = load_workbook(r'G:\我的雲端硬碟\Horizon\python_stock\3005_is_2024Q2_202410_formation.xlsx')
+    source_wb = load_workbook(r'G:\我的雲端硬碟\Horizon\python_stock\1537_is_2024Q3_202501_formation.xlsx')
     target_wb = load_workbook(file_path)
 
     # 遍歷來源檔案中的所有工作表
@@ -233,8 +233,8 @@ def combine_revenue_and_financial_data(stock_code, start_year, end_year, target_
     print(f"資料已成功合併並輸出到 '{file_path}'，且格式已套用至「★IS(IFRS項目)」sheet")
 
 # 使用示例
-stock_code = '1307'
+stock_code = '1537'
 start_year = 2021
-end_year = 2024
+end_year = 2025
 target_codes = ['4000', '5000', '6000', '6500', '6900', '7100', '7010', '7020', '7050', '7060', '7000', '7900', '7950', '8000', '8200', '8300', '8500', '8610', '8710', '8720', '9750', '9850']
 combine_revenue_and_financial_data(stock_code, start_year, end_year, target_codes, mode_revenue='a', mode_financial='A')
