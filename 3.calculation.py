@@ -104,6 +104,12 @@ def calculate_and_combine(df):
     # 新增「EPS+」欄位，當「Last 4Q EPS」大於等於0時，「EPS+」等於「Last 4Q EPS」，否則「EPS+」為0
     df['EPS+'] = np.where(df['Last 4Q EPS'] >= 0, df['Last 4Q EPS'], 0)
 
+    # 確保「前1年度 EPS」為數值型態
+    df['前1年度 EPS'] = pd.to_numeric(df['前1年度 EPS'], errors='coerce')
+
+    # 若「前1年度 EPS」的值大於「EPS+」，則以「前1年度 EPS」取代「EPS+」
+    df['EPS+'] = np.where(df['前1年度 EPS'] > df['EPS+'], df['前1年度 EPS'], df['EPS+'])
+
     # 只將「無法計算」替換為0，不影響其他值
     df['前1年度 配發率'] = df['前1年度 配發率'].replace('無法計算', 0)
     df['前2年度 配發率'] = df['前2年度 配發率'].replace('無法計算', 0)
