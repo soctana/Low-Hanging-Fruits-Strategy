@@ -47,8 +47,13 @@ def fetch_stage_one_financial_data(stock_list, market_type):
     api_url = "https://openapi.twse.com.tw/v1/opendata/t187ap05_L" if market_type == 2 else "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O"
 
     try:
-        today = datetime.datetime(2025, 2, 5)  # 模擬今天是 2025/2/5
-        special_period = datetime.datetime(today.year, 2, 1) <= today <= datetime.datetime(today.year, 3, 10)
+        # 以系統日期為今日
+        today = datetime.date.today()
+
+        # 用 date 而不是 datetime
+        start = datetime.date(today.year, 2, 1)
+        end   = datetime.date(today.year, 3, 10)
+        special_period = start <= today <= end
 
         response = requests.get(api_url)
         response.raise_for_status()
