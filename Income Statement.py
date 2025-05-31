@@ -13,9 +13,9 @@ from openpyxl.cell import MergedCell
 def fetch_revenue(year, month, stock_code, mode='a'):
     republic_year = year - 1911  # 西元轉民國年
     if mode == 'a':  # 上市公司
-        url = f'https://mops.twse.com.tw/nas/t21/sii/t21sc03_{republic_year}_{month}_0.html'
+        url = f'https://mopsov.twse.com.tw/nas/t21/sii/t21sc03_{republic_year}_{month}_0.html'
     elif mode == 'b':  # 上櫫公司
-        url = f'https://mops.twse.com.tw/nas/t21/otc/t21sc03_{republic_year}_{month}_0.html'
+        url = f'https://mopsov.twse.com.tw/nas/t21/otc/t21sc03_{republic_year}_{month}_0.html'
     
     response = requests.get(url)
     response.encoding = 'big5'
@@ -44,9 +44,9 @@ def fetch_financial_data(stock_code, years, target_codes, section_id, mode, spec
                 continue  # 如果指定了具體季度，跳過其他季度
 
             if mode == 'A':  # 上市公司
-                url = f"https://mops.twse.com.tw/server-java/t164sb01?step=3&SYEAR={year}&file_name=tifrs-fr1-m1-ci-cr-{stock_code}-{year}Q{quarter}.html"
+                url = f"https://mopsov.twse.com.tw/server-java/t164sb01?step=3&SYEAR={year}&file_name=tifrs-fr1-m1-ci-cr-{stock_code}-{year}Q{quarter}.html"
             elif mode == 'B':  # 上櫃公司
-                url = f"https://mops.twse.com.tw/server-java/t164sb01?step=1&CO_ID={stock_code}&SYEAR={year}&SSEASON={quarter}&REPORT_ID=A"
+                url = f"https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID={stock_code}&SYEAR={year}&SSEASON={quarter}&REPORT_ID=A"
 
             try:
                 response = requests.get(url, timeout=5)
@@ -233,7 +233,7 @@ def combine_revenue_and_financial_data(stock_code, start_year, end_year, target_
     print(f"資料已成功合併並輸出到 '{file_path}'，且格式已套用至「★IS(IFRS項目)」sheet")
 
 # 使用示例
-stock_code = '1537'
+stock_code = '2330'
 start_year = 2021
 end_year = 2025
 target_codes = ['4000', '5000', '6000', '6500', '6900', '7100', '7010', '7020', '7050', '7060', '7000', '7900', '7950', '8000', '8200', '8300', '8500', '8610', '8710', '8720', '9750', '9850']
